@@ -15,5 +15,8 @@
   "scripts": {
     "test": "node ./test/index.js",
     "mtest": "mocha test/__test__.js"
+  },
+  "dependencies": {
+    "mocha": "^6.2.2"
   }
 }

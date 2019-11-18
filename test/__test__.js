@@ -7,19 +7,22 @@ const _ = require('lodash');
 const XTemplate = require('xtemplate');
 const data = require('./data');
 var originData = require('./origin-data');
+const helper = require('@imgcook/dsl-helper');
+
 const vm = new NodeVM({
   console: 'inherit',
   sandbox: {}
 });
 
-describe('Generate', function() {
-  describe('#generateCode()', function() {
-    it('should generate code to write to file', function() {
-      co(function*() {
+describe('Generate', function () {
+  describe('#generateCode()', function () {
+    it('should generate code to write to file', function () {
+      co(function* () {
         const code = fs.readFileSync(
           path.resolve(__dirname, '../src/index.js'),
           'utf8'
         );
+
         const prettierOpt = {
           printWidth: 120,
           singleQuote: true
@@ -27,7 +30,8 @@ describe('Generate', function() {
         const renderInfo = vm.run(code)(data, {
           prettier: prettier,
           _: _,
-          originData: originData
+          originData: originData,
+          helper: helper,
         });
         const renderData = renderInfo.renderData;
         const { modClass, style } = renderData;
@@ -46,7 +50,7 @@ describe('Generate', function() {
           prettier.format(modClass, prettierOpt)
         );
         fs.writeFileSync(
-          path.join(__dirname, './codeExample/style.js'),
+          path.join(__dirname, './codeExample/style.less'),
           prettier.format(style, prettierOpt)
         );
       });

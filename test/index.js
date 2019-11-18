@@ -8,13 +8,14 @@ const { NodeVM } = require('vm2');
 const _ = require('lodash');
 const data = require('./data');
 const originData = require('./origin-data');
+const helper = require('@imgcook/dsl-helper');
 
 const vm = new NodeVM({
   console: 'inherit',
   sandbox: {}
 });
 
-co(function*() {
+co(function* () {
   const xtplRender = thunkify(xtpl.render);
   const code = fs.readFileSync(
     path.resolve(__dirname, '../src/index.js'),
@@ -23,7 +24,8 @@ co(function*() {
   const renderInfo = vm.run(code)(data, {
     prettier: prettier,
     _: _,
-    originData: originData
+    originData: originData,
+    helper: helper,
   });
   const renderData = renderInfo.renderData;
   const ret = yield xtplRender(
